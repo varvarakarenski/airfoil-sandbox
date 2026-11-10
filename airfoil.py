@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.widgets import Button, Slider
 
 # example: NACA 2412
 
@@ -9,6 +10,8 @@ import numpy as np
 
 beta = np.linspace(0, np.pi, 200)
 x = (1-np.cos(beta))/2
+
+a = 1
 
 def naca4(m, p, t, tail):
 
@@ -53,15 +56,36 @@ p = int(naca[1])/10
 
 xu, yu, xl, yl, yc = naca4(m, p, t, tail)
 
-plt.plot(xu, yu, label = "upper surface")
-plt.plot(xl, yl, label = "lower surface")
-plt.plot(x, yc, ls='--', label="camber")
+fig, ax = plt.subplots()
+fig.subplots_adjust(left=0.25, bottom=0.25)
+thickness_ax = fig.add_axes((0.25, 0.1, 0.65, 0.03))
 
-plt.axis("equal")
-plt.legend()
-plt.grid()
-plt.title("NACA " + naca + " Airfoil")
-plt.xlabel("Chord")
-plt.ylabel("Thickness")
+upper_line, = ax.plot(xu, yu, label="upper surface")
+lower_line, = ax.plot(xl, yl, label="lower surface")
+camber_line, = ax.plot(x, yc, ls='--', label="camber")
+
+thickness_slider = Slider(
+    ax=thickness_ax,
+    label='Thickness',
+    valmin=0.01,
+    valmax=0.5,
+    valinit=t,
+)
+
+def update(val):
+    xu, yu, xl, yl, yc = naca4(m, p, thickness_slider.val, tail)
+    upper_line.set_data(xu, yu)
+    lower_line.set_data(xl, yl)
+    camber_line.set_data(x, yc)
+    fig.canvas.draw_idle(x, yc)
+
+thickness_slider.on_changed(update)
+
+ax.axis("equal")
+ax.legend()
+ax.grid()
+ax.set_title("NACA " + naca + " Airfoil")
+ax.set_xlabel("Chord")
+ax.set_ylabel("Thickness")
 
 plt.show()
