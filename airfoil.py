@@ -49,11 +49,7 @@ def draw_plot():
     document.getElementById("p-val").innerText = f"{p:.1f}"
     
     xu, yu, xl, yl, yc = naca4(m, p, t, current_tail)
-    # symmetric airfoils have no camber position, so the code uses 0
-    p_digit = round(p * 10)
-    if m == 0:
-        p_digit = 0
-    code = f"{round(m * 100)}{p_digit}{round(t * 100):02d}"
+    code = f"{round(m * 100)}{round(p * 10) if m else 0}{round(t * 100):02d}"
 
     fig, ax = plt.subplots(figsize=(8,4))
 
