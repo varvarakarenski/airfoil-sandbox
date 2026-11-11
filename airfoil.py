@@ -11,8 +11,6 @@ from matplotlib.widgets import Button, Slider
 beta = np.linspace(0, np.pi, 200)
 x = (1-np.cos(beta))/2
 
-a = 1
-
 def naca4(m, p, t, tail):
 
     if tail == "yes":
@@ -20,7 +18,7 @@ def naca4(m, p, t, tail):
     elif tail == "no":
         yt = 5*t*(0.2969*np.sqrt(x)-0.1260*x-0.3516*x**2+0.2843*x**3-0.1015*x**4)
 
-    if p == 0:
+    if m == 0:
         yc = np.zeros_like(x)
         dyc = np.zeros_like(x)
     else:
@@ -53,12 +51,16 @@ t = int(naca[2:4])/100
 m = int(naca[0])/100
 # p = position of camber
 p = int(naca[1])/10
+if p == 0:
+    p = 0.4
 
 xu, yu, xl, yl, yc = naca4(m, p, t, tail)
 
 fig, ax = plt.subplots()
-fig.subplots_adjust(left=0.25, bottom=0.25)
-thickness_ax = fig.add_axes((0.25, 0.1, 0.65, 0.03))
+fig.subplots_adjust(left=0.25, right=0.72, bottom=0.3)
+thickness_ax = fig.add_axes((0.25, 0.15, 0.65, 0.03))
+max_camber_ax = fig.add_axes((0.25, 0.1, 0.65, 0.03))
+position_camber_ax = fig.add_axes((0.25, 0.05, 0.65, 0.03))
 
 upper_line, = ax.plot(xu, yu, label="upper surface")
 lower_line, = ax.plot(xl, yl, label="lower surface")
@@ -72,17 +74,39 @@ thickness_slider = Slider(
     valinit=t,
 )
 
+max_camber_slider = Slider(
+    ax=max_camber_ax,
+    label='Maximum Camber',
+    valmin=0.00,
+    valmax=0.09,
+    valinit=m,
+)
+
+position_camber_slider = Slider(
+    ax=position_camber_ax,
+    label='Camber Position',
+    valmin=0.1,
+    valmax=0.9,
+    valinit=p,
+)
+
 def update(val):
-    xu, yu, xl, yl, yc = naca4(m, p, thickness_slider.val, tail)
+    xu, yu, xl, yl, yc = naca4(max_camber_slider.val, position_camber_slider.val, thickness_slider.val, tail)
     upper_line.set_data(xu, yu)
     lower_line.set_data(xl, yl)
     camber_line.set_data(x, yc)
-    fig.canvas.draw_idle(x, yc)
+    code = f"{round(max_camber_slider.val*100)}{round(position_camber_slider.val*10)}{round(thickness_slider.val*100):02d}"
+    ax.set_title("NACA " + code + " Airfoil")
+    ax.relim()
+    ax.autoscale_view()
+    fig.canvas.draw_idle()
 
 thickness_slider.on_changed(update)
+max_camber_slider.on_changed(update)
+position_camber_slider.on_changed(update)
 
 ax.axis("equal")
-ax.legend()
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 ax.grid()
 ax.set_title("NACA " + naca + " Airfoil")
 ax.set_xlabel("Chord")
