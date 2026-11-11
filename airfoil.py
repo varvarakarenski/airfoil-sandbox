@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from pyscript import display, document, when, window # type: ignore
-from pyodide.ffi import create_proxy # type: ignore
+from pyscript import display, document, when # type: ignore
 
 # example: NACA 2412
 
@@ -43,8 +42,8 @@ def draw_plot():
     p = float(document.getElementById("p-slider").value)
 
     document.getElementById("t-val").innerText = f"{t:.2f}"
-    document.getElementById("m-val").innerText = f"{t:.2f}"
-    document.getElementById("p-val").innerText = f"{t:.1f}"
+    document.getElementById("m-val").innerText = f"{m:.2f}"
+    document.getElementById("p-val").innerText = f"{p:.1f}"
     
     xu, yu, xl, yl, yc = naca4(m, p, t, current_tail)
     code = f"{round(m * 100)}{round(p * 10)}{round(t * 100):02d}"
@@ -88,7 +87,17 @@ def start_airfoil_plot(naca, tail):
     document.getElementById("plotter-section").style.display = "block"
     draw_plot()
 
-window.startAirfoilPlot = create_proxy(start_airfoil_plot)
+naca = input("Enter a 4-digit NACA number: ")
+
+while not naca.isdigit() or len(naca) != 4:
+    naca = input("Please enter a 4-digit NACA number: ")
+
+tail = input("Simulate a closed tail? (yes/no) ")
+
+while tail != "yes" and tail != "no":
+    tail = input("Please answer with a lowercase 'yes' or 'no'. Computers don't have very good imaginations. ")
+
+start_airfoil_plot(naca, tail)
 
 @when("input", "#t-slider")
 @when("input", "#m-slider")
