@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("agg")  # workers have no DOM canvas; render to an image instead
 import matplotlib.pyplot as plt
 import numpy as np
 from pyscript import display, document, when # type: ignore
