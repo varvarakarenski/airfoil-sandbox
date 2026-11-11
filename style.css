@@ -29,9 +29,36 @@ body {
     padding: 0 20px;
 }
 
-#plotter-section, .terminal {
-    max-width: 800px;
+.workspace {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 1400px;
     margin: 0 auto 24px auto;
+}
+
+.terminal {
+    flex: 0 1 600px;
+}
+
+#plotter-section {
+    flex: 1 1 500px;
+    animation: pop-in 0.5s ease-out;
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #plotter-section {
+        animation: none;
+    }
 }
 
 .terminal {
