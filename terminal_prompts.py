@@ -17,5 +17,6 @@ ask()
 
 @when("click", "#reset-btn")
 def on_reset(event):
+    window.document.getElementById("plot-area").innerHTML = ""
     print()
     ask()

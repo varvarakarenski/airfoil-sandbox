@@ -1,4 +1,4 @@
-## Airfoil Sandbox
+# Airfoil Sandbox
 
 Airfoil sandbox is an interactive webpage that allows the user to visualize a 4-digit NACA airfoil using pyscript.
 
@@ -28,7 +28,7 @@ Here are a few of the equations used to model the airfoil:
         dyc = np.where(x >= p, ((2*m)/(1-p)**2)*(p-x), ((2*m)/p**2)*(p-x))
 ```
 
-# Check our airfoil.py for the full script.
+## Check our airfoil.py for the full script.
 
 Sometimes, mishaps with extreme values for camber turn out with these wonky airfoils:
 
@@ -38,6 +38,6 @@ Big thank you to gzuidhof on GitHub for making coi-serviceworker open source. Th
 
 --> coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT
 
-# Coming up: Simulations
+## Coming up: Simulations
 
 Soon, you'll be able to visualize flow over the airfoil you create. Stay tuned.
