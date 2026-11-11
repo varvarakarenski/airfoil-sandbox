@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.widgets import Button, Slider
+from pyscript import display, document, when, window # type: ignore
+from pyodide.ffi import create_proxy # type: ignore
 
 # example: NACA 2412
 
@@ -10,6 +11,7 @@ from matplotlib.widgets import Button, Slider
 
 beta = np.linspace(0, np.pi, 200)
 x = (1-np.cos(beta))/2
+current_tail = "no"
 
 def naca4(m, p, t, tail):
 
@@ -35,81 +37,61 @@ def naca4(m, p, t, tail):
 
     return xu, yu, xl, yl, yc
 
-naca = input("Enter a 4-digit NACA number: ")
+def draw_plot():
+    t = float(document.getElementById("t-slider").value)
+    m = float(document.getElementById("m-slider").value)
+    p = float(document.getElementById("p-slider").value)
 
-while not naca.isdigit() or len(naca) != 4:
-    naca = input("Please enter a 4-digit NACA number: ")
+    document.getElementById("t-val").innerText = f"{t:.2f}"
+    document.getElementById("m-val").innerText = f"{t:.2f}"
+    document.getElementById("p-val").innerText = f"{t:.1f}"
+    
+    xu, yu, xl, yl, yc = naca4(m, p, t, current_tail)
+    code = f"{round(m * 100)}{round(p * 10)}{round(t * 100):02d}"
 
-tail = input("Simulate a closed tail? (yes/no) ")
+    fig, ax = plt.subplots(figsize=(8,4))
 
-while tail != "yes" and tail != "no":
-    tail = input("Please answer with a lowercase 'yes' or 'no'. Computers don't have very good imaginations. ")
+    ax.plot(xu, yu, label="upper surface")
+    ax.plot(xl, yl, label="lower surface")
+    ax.plot(x, yc, ls='--', label="camber")
 
-# t = thickness
-t = int(naca[2:4])/100
-# m = maximum camber
-m = int(naca[0])/100
-# p = position of camber
-p = int(naca[1])/10
-if p == 0:
-    p = 0.4
-
-xu, yu, xl, yl, yc = naca4(m, p, t, tail)
-
-fig, ax = plt.subplots()
-fig.subplots_adjust(left=0.25, right=0.72, bottom=0.3)
-thickness_ax = fig.add_axes((0.25, 0.15, 0.65, 0.03))
-max_camber_ax = fig.add_axes((0.25, 0.1, 0.65, 0.03))
-position_camber_ax = fig.add_axes((0.25, 0.05, 0.65, 0.03))
-
-upper_line, = ax.plot(xu, yu, label="upper surface")
-lower_line, = ax.plot(xl, yl, label="lower surface")
-camber_line, = ax.plot(x, yc, ls='--', label="camber")
-
-thickness_slider = Slider(
-    ax=thickness_ax,
-    label='Thickness',
-    valmin=0.01,
-    valmax=0.5,
-    valinit=t,
-)
-
-max_camber_slider = Slider(
-    ax=max_camber_ax,
-    label='Maximum Camber',
-    valmin=0.00,
-    valmax=0.09,
-    valinit=m,
-)
-
-position_camber_slider = Slider(
-    ax=position_camber_ax,
-    label='Camber Position',
-    valmin=0.1,
-    valmax=0.9,
-    valinit=p,
-)
-
-def update(val):
-    xu, yu, xl, yl, yc = naca4(max_camber_slider.val, position_camber_slider.val, thickness_slider.val, tail)
-    upper_line.set_data(xu, yu)
-    lower_line.set_data(xl, yl)
-    camber_line.set_data(x, yc)
-    code = f"{round(max_camber_slider.val*100)}{round(position_camber_slider.val*10)}{round(thickness_slider.val*100):02d}"
+    ax.axis("equal")
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+    ax.grid()
     ax.set_title("NACA " + code + " Airfoil")
-    ax.relim()
-    ax.autoscale_view()
-    fig.canvas.draw_idle()
+    ax.set_xlabel("Chord")
+    ax.set_ylabel("Thickness")
+    fig.tight_layout()
 
-thickness_slider.on_changed(update)
-max_camber_slider.on_changed(update)
-position_camber_slider.on_changed(update)
+    document.getElementById("plot-area").innerHTML = ""
+    display(fig, target="plot-area")
+    plt.close(fig)
 
-ax.axis("equal")
-ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-ax.grid()
-ax.set_title("NACA " + naca + " Airfoil")
-ax.set_xlabel("Chord")
-ax.set_ylabel("Thickness")
+def start_airfoil_plot(naca, tail):
+    global current_tail
+    current_tail = tail
 
-plt.show()
+    # t = thickness
+    t = int(naca[2:4])/100
+    # m = maximum camber
+    m = int(naca[0])/100
+    # p = position of camber
+    p = int(naca[1])/10
+
+    if p == 0:
+        p = 0.4
+
+    document.getElementById("t-slider").value = str(t)
+    document.getElementById("m-slider").value = str(m)
+    document.getElementById("p-slider").value = str(p)
+
+    document.getElementById("plotter-section").style.display = "block"
+    draw_plot()
+
+window.startAirfoilPlot = create_proxy(start_airfoil_plot)
+
+@when("input", "#t-slider")
+@when("input", "#m-slider")
+@when("input", "#p-slider")
+def on_slider_change(event):
+    draw_plot()

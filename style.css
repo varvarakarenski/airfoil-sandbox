@@ -21,8 +21,39 @@ body {
     padding: 0 20px;
 }
 
+.container { 
+    max-width: 800px; 
+    margin: 20px auto; 
+    font-family: sans-serif; 
+}
+
 .terminal {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: grid;
+    gap: 12px;
+    background: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    min-width: 150px;
+    font-weight: bold;
+}
+
+#plot-area img {
+    max-width: 100%;
+    height: auto;
 }
