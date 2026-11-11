@@ -28,7 +28,7 @@ Here are a few of the equations used to model the airfoil:
         dyc = np.where(x >= p, ((2*m)/(1-p)**2)*(p-x), ((2*m)/p**2)*(p-x))
 ```
 
-Check our airfoil.py for the full script.
+# Check our airfoil.py for the full script.
 
 Sometimes, mishaps with extreme values for camber turn out with these wonky airfoils:
 
@@ -37,3 +37,7 @@ Sometimes, mishaps with extreme values for camber turn out with these wonky airf
 Big thank you to gzuidhof on GitHub for making coi-serviceworker open source. This project's coi-serviceworker.js file is sourced from the Github repo.
 
 --> coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT
+
+# Coming up: Simulations
+
+Soon, you'll be able to visualize flow over the airfoil you create. Stay tuned.
