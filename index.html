@@ -36,7 +36,19 @@
         </div>
 
         <div class="terminal">
-            <script type="py" src="./airfoil.py" config="./pyscript.json" terminal worker></script>
+            <div class="mac-header">
+                <div class="mac-buttons">
+                    <span class="mac-dot close"></span>
+                    <span class="mac-dot minimize"></span>
+                    <span class="mac-dot maximize"></span>
+                </div>
+                <div class="mac-title">airfoil.py -- -zsh - 80x24</div>
+            </div>
+            <div class="mac-body">
+                <script type="py" src="./terminal_prompts.py" terminal worker></script>
+            </div>
         </div>
+
+        <script type="py" src="./airfoil.py" config="./pyscript.json"></script>
     </body>
 </html>
