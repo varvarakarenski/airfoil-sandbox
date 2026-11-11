@@ -14,7 +14,6 @@ from pyodide.ffi import create_proxy # type: ignore
 beta = np.linspace(0, np.pi, 200)
 x = (1-np.cos(beta))/2
 current_tail = "no"
-start_naca = "0012"
 
 def naca4(m, p, t, tail):
 
@@ -71,9 +70,8 @@ def draw_plot():
     plt.close(fig)
 
 def start_airfoil_plot(naca, tail):
-    global current_tail, start_naca
+    global current_tail
     current_tail = tail
-    start_naca = naca
 
     # t = thickness
     t = int(naca[2:4])/100
@@ -99,7 +97,3 @@ window.startAirfoilPlot = create_proxy(start_airfoil_plot)
 @when("input", "#p-slider")
 def on_slider_change(event):
     draw_plot()
-
-@when("click", "#reset-btn")
-def on_reset(event):
-    start_airfoil_plot(start_naca, current_tail)

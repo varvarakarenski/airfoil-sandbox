@@ -159,6 +159,10 @@ py-terminal, .py-terminal, .xterm, .xterm-viewport, .xterm-screen {
     gap: 14px;
 }
 
+.row input[type="range"] {
+    flex: 1;
+}
+
 label {
     min-width: 170px;
     font-weight: 500;
