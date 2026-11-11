@@ -1,5 +1,5 @@
 html {
-    background-color: rgb(11, 132, 212);
+    background-color: rgb(11, 44, 190);
 }
 
 body {
@@ -192,4 +192,9 @@ label {
     height: auto;
     border-radius: 6px;
     margin-top: 10px;
+}
+
+h1 {
+    color: white;
+    text-align: center;
 }
