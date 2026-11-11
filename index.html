@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./coi-serviceworker.js"></script>
+        <link rel="stylesheet" href="https://pyscript.net">
+        <script type="module" src="https://pyscript.net"></script>
+    </head>
+
+    <body>
+        <div class = "navbar">
+            <a href = "index.html"><p>NACA Visualization</p></a>
+            <a href = "simulations.html"><p>Simulations</p></a>
+        </div>
+
+        <div class="terminal">
+            <script type="py" src="./airfoil.py" terminal worker></script>
+        </div>
+    </body>
+</html>
