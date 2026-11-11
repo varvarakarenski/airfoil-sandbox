@@ -10,8 +10,8 @@ Initially, Airfoil Sandbox was a simple numpy/matplotlib script. It went through
 
 Here are a few of the equations used to model the airfoil: 
 
-'''
-if tail == "yes":
+```
+    if tail == "yes":
         yt = 5*t*(0.2969*np.sqrt(x)-0.1260*x-0.3516*x**2+0.2843*x**3-0.1036*x**4)
     elif tail == "no":
         yt = 5*t*(0.2969*np.sqrt(x)-0.1260*x-0.3516*x**2+0.2843*x**3-0.1015*x**4)
@@ -22,6 +22,6 @@ if tail == "yes":
     else:
         yc = np.where(x >= p, ((m/(1-p)**2)*(1-2*p+2*p*x-x**2)), ((m/p**2)*(2*p*x-x**2)))
         dyc = np.where(x >= p, ((2*m)/(1-p)**2)*(p-x), ((2*m)/p**2)*(p-x))
-'''
+```
 
 Check our airfoil.py for the full script.
