@@ -1,8 +1,9 @@
 import matplotlib
-matplotlib.use("agg")  # workers have no DOM canvas; render to an image instead
+matplotlib.use("agg")  # render to an image for display()
 import matplotlib.pyplot as plt
 import numpy as np
-from pyscript import display, document, when # type: ignore
+from pyscript import display, document, when, window # type: ignore
+from pyodide.ffi import create_proxy # type: ignore
 
 # example: NACA 2412
 
@@ -89,17 +90,7 @@ def start_airfoil_plot(naca, tail):
     document.getElementById("plotter-section").style.display = "block"
     draw_plot()
 
-naca = input("Enter a 4-digit NACA number: ")
-
-while not naca.isdigit() or len(naca) != 4:
-    naca = input("Please enter a 4-digit NACA number: ")
-
-tail = input("Simulate a closed tail? (yes/no) ")
-
-while tail != "yes" and tail != "no":
-    tail = input("Please answer with a lowercase 'yes' or 'no'. Computers don't have very good imaginations. ")
-
-start_airfoil_plot(naca, tail)
+window.startAirfoilPlot = create_proxy(start_airfoil_plot)
 
 @when("input", "#t-slider")
 @when("input", "#m-slider")
