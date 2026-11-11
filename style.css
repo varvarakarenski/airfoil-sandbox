@@ -15,7 +15,6 @@ body {
     top: 0;
     z-index: 10;
     background-color: rgb(16, 60, 255);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
     padding: 14px 20px;
 
     display: flex;
@@ -33,7 +32,7 @@ body {
 }
 
 .navbar a:hover,
-.navbar a.active {
+.navbar a:active {
     color: white;
     background-color: rgba(255, 255, 255, 0.15);
 }
@@ -59,13 +58,13 @@ body {
 
 #plotter-section {
     flex: 1 1 500px;
-    animation: pop-in 0.5s ease-out;
+    animation: pop-in 0.3s ease-out;
 }
 
 @keyframes pop-in {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.96);
+        transform: translateY(6px);
     }
 }
 
@@ -155,12 +154,9 @@ py-terminal, .py-terminal, .xterm, .xterm-viewport, .xterm-screen {
 
 .row {
     display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.row input[type="range"] {
-    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
 }
 
 label {
